@@ -53,7 +53,7 @@ function hasPixelMeasurements(multiFrameInstance) {
     Boolean(sharedSequence?.PixelMeasuresSequence) ||
     Boolean(
       multiFrameInstance.PixelSpacing &&
-        (multiFrameInstance.SliceThickness || multiFrameInstance.SpacingBetweenFrames)
+      (multiFrameInstance.SliceThickness || multiFrameInstance.SpacingBetweenFrames)
     )
   );
 }
@@ -67,7 +67,7 @@ function hasOrientation(multiFrameInstance) {
     Boolean(perFrameSequence?.PlaneOrientationSequence) ||
     Boolean(
       multiFrameInstance.ImageOrientationPatient ||
-        multiFrameInstance.DetectorInformationSequence?.[0]?.ImageOrientationPatient
+      multiFrameInstance.DetectorInformationSequence?.[0]?.ImageOrientationPatient
     )
   );
 }
@@ -80,7 +80,7 @@ function hasPosition(multiFrameInstance) {
     Boolean(perFrameSequence?.CTPositionSequence) ||
     Boolean(
       multiFrameInstance.ImagePositionPatient ||
-        multiFrameInstance.DetectorInformationSequence?.[0]?.ImagePositionPatient
+      multiFrameInstance.DetectorInformationSequence?.[0]?.ImagePositionPatient
     )
   );
 }
@@ -240,7 +240,13 @@ function _getSpacingIssue(spacing, averageSpacing) {
 }
 
 function _getPerpendicularDistance(a, b) {
-  return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) + Math.pow(a[2] - b[2], 2));
+  if (a && b) {
+    return Math.sqrt(
+      Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) + Math.pow(a[2] - b[2], 2)
+    );
+  } else {
+    return 0;
+  }
 }
 
 const constructableModalities = ['MR', 'CT', 'PT', 'NM'];
