@@ -161,6 +161,10 @@ function processSingleframe(instances) {
     averageSpacingBetweenFrames =
       _getPerpendicularDistance(firstImagePositionPatient, lastIpp) / (instances.length - 1);
 
+    if (averageSpacingBetweenFrames === 0) {
+      return { value: false };
+    }
+
     let previousImagePositionPatient = firstImagePositionPatient;
 
     for (let i = 1; i < instances.length; i++) {

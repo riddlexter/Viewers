@@ -28,6 +28,10 @@ export default function areAllImageSpacingEqual(
   const averageSpacingBetweenFrames =
     _getPerpendicularDistance(firstImagePositionPatient, lastIpp) / (instances.length - 1);
 
+  if (averageSpacingBetweenFrames === 0) {
+    return;
+  }
+
   let previousImagePositionPatient = firstImagePositionPatient;
 
   const issuesFound = [];
