@@ -154,10 +154,18 @@ window.config = {
       ],
     },
   },
-
   showStudyList: false,
   investigationalUseDialog: {
     option: 'never',
+  },
+  // some windows systems have issues with more than 3 web workers
+  maxNumberOfWebWorkers: 3,
+  maxNumRequests: {
+    interaction: 100,
+    thumbnail: 75,
+    // Prefetch number is dependent on the http protocol. For http 2 or
+    // above, the number of requests can be go a lot higher.
+    prefetch: 25,
   },
   extensions: [],
   modes: [],
