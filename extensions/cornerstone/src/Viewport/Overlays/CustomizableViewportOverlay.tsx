@@ -176,7 +176,7 @@ function CustomizableViewportOverlay({
           formatTime: formatDICOMTime,
           formatNumberPrecision,
         },
-        instance: instances ? instances[imageIndex] : null,
+        instance: instances ? instances[0] : null,
         voi,
         scale,
         instanceNumber,
@@ -228,7 +228,7 @@ function CustomizableViewportOverlay({
             <div key={`${keyPrefix}_${index}`}>
               {item?.condition
                 ? item.condition({
-                    instance: instances ? instances[imageIndex] : null,
+                    instance: instances ? instances[0] : null,
                     formatters: { formatDate: formatDICOMDate },
                   })
                   ? _renderOverlayItem(item)
