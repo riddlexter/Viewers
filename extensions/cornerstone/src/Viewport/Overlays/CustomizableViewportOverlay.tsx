@@ -176,7 +176,7 @@ function CustomizableViewportOverlay({
           formatTime: formatDICOMTime,
           formatNumberPrecision,
         },
-        instance: instances ? instances[item?.instanceIndex] : null,
+        instance: instances ? instances[imageIndex] : null,
         voi,
         scale,
         instanceNumber,
@@ -215,14 +215,20 @@ function CustomizableViewportOverlay({
 
   const getContent = useCallback(
     (customization, defaultItems, keyPrefix) => {
-      const items = customization?.items ?? defaultItems;
+      const items = [];
+      if (customization?.items) {
+        items.push(...customization.items);
+      }
+      if (defaultItems) {
+        items.push(...defaultItems);
+      }
       return (
         <>
           {items.map((item, index) => (
             <div key={`${keyPrefix}_${index}`}>
               {item?.condition
                 ? item.condition({
-                    instance: instances ? instances[item?.instanceIndex] : null,
+                    instance: instances ? instances[imageIndex] : null,
                     formatters: { formatDate: formatDICOMDate },
                   })
                   ? _renderOverlayItem(item)
@@ -236,42 +242,7 @@ function CustomizableViewportOverlay({
     [_renderOverlayItem]
   );
 
-  const studyDateItem = {
-    id: 'StudyDate',
-    customizationType: 'ohif.overlayItem',
-    label: '',
-    title: 'Study date',
-    condition: ({ instance }) => instance && instance.StudyDate,
-    contentF: ({ instance, formatters: { formatDate } }) => formatDate(instance.StudyDate),
-  };
-
-  const seriesDescriptionItem = {
-    id: 'SeriesDescription',
-    customizationType: 'ohif.overlayItem',
-    label: '',
-    title: 'Series description',
-    attribute: 'SeriesDescription',
-    condition: ({ instance }) => {
-      return instance && instance.SeriesDescription;
-    },
-  };
-
-  const topLeftItems = instances
-    ? instances
-        .map((instance, index) => {
-          return [
-            {
-              ...studyDateItem,
-              instanceIndex: index,
-            },
-            {
-              ...seriesDescriptionItem,
-              instanceIndex: index,
-            },
-          ];
-        })
-        .flat()
-    : [];
+  const topLeftItems = [];
 
   return (
     <ViewportOverlay
@@ -282,34 +253,8 @@ function CustomizableViewportOverlay({
         getContent(topLeftCustomization, [...topLeftItems], 'topLeftOverlayItem')
       }
       topRight={getContent(topRightCustomization, [], 'topRightOverlayItem')}
-      bottomLeft={getContent(
-        bottomLeftCustomization,
-        [
-          {
-            id: 'WindowLevel',
-            customizationType: 'ohif.overlayItem.windowLevel',
-          },
-          {
-            id: 'ZoomLevel',
-            customizationType: 'ohif.overlayItem.zoomLevel',
-            condition: () => {
-              const activeToolName = toolGroupService.getActiveToolForViewport(viewportId);
-              return activeToolName === 'Zoom';
-            },
-          },
-        ],
-        'bottomLeftOverlayItem'
-      )}
-      bottomRight={getContent(
-        bottomRightCustomization,
-        [
-          {
-            id: 'InstanceNumber',
-            customizationType: 'ohif.overlayItem.instanceNumber',
-          },
-        ],
-        'bottomRightOverlayItem'
-      )}
+      bottomLeft={getContent(bottomLeftCustomization, [], 'bottomLeftOverlayItem')}
+      bottomRight={getContent(bottomRightCustomization, [], 'bottomRightOverlayItem')}
     />
   );
 }
