@@ -166,6 +166,16 @@ const toolbarButtons: Button[] = [
     },
   },
   {
+    id: 'ToggleOverlay',
+    uiType: 'ohif.radioGroup',
+    props: {
+      icon: 'toggle-dicom-overlay',
+      label: 'Toggle overlay',
+      commands: 'toggleOverlays',
+      evaluate: 'evaluate.action',
+    },
+  },
+  {
     id: 'Layout',
     uiType: 'ohif.layoutSelector',
     props: {

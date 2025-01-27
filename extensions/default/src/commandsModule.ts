@@ -609,6 +609,9 @@ const commandsModule = ({
     updateViewportDisplaySet: {
       commandFn: actions.updateViewportDisplaySet,
     },
+    toggleOverlays: {
+      commandFn: actions.toggleOverlays,
+    },
   };
 
   return {
