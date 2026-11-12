@@ -60,6 +60,10 @@ window.config = {
 
   customizationService: [
     {
+      // No onboarding tour: the viewer is opened by patients and external physicians from links.
+      'ohif.tours': { $set: [] },
+    },
+    {
       'viewportOverlay.topLeft': {
         $set: [
           overlayItem(
