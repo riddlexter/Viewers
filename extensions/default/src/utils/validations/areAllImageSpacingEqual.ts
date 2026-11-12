@@ -29,6 +29,10 @@ export default function areAllImageSpacingEqual(
   }
   const averageSpacingBetweenFrames =
     _getPerpendicularDistance(firstImagePositionPatient, lastIpp) / (instances.length - 1);
+  // TeleRAD: first and last image at the same position -> spacing 0, nothing to compare.
+  if (averageSpacingBetweenFrames === 0) {
+    return;
+  }
 
   let previousImagePositionPatient = firstImagePositionPatient;
 

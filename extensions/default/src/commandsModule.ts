@@ -872,6 +872,8 @@ const commandsModule = ({
   };
 
   const definitions = {
+    // TeleRAD: "Toggle overlay" toolbar button (config/docker_nginx-orthanc.js).
+    toggleOverlays: actions.toggleOverlays,
     multimonitor: actions.multimonitor,
     promptSaveReport: actions.promptSaveReport,
     loadStudy: actions.loadStudy,

@@ -53,6 +53,10 @@ export default function areAllImagePositionsEqual(instances: Array<any>): boolea
 
   const averageSpacingBetweenFrames =
     _getPerpendicularDistance(firstImagePositionPatient, lastIpp) / (instances.length - 1);
+  // TeleRAD: first and last image at the same position -> spacing 0, not a volume.
+  if (averageSpacingBetweenFrames === 0) {
+    return false;
+  }
 
   let previousImagePositionPatient = firstImagePositionPatient;
   for (let i = 1; i < instances.length; i++) {

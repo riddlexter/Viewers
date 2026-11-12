@@ -163,6 +163,11 @@ function processSingleframe(instances) {
     averageSpacingBetweenFrames =
       _getPerpendicularDistance(firstImagePositionPatient, lastIpp) / (instances.length - 1);
 
+    // TeleRAD: first and last image at the same position -> spacing 0, not reconstructable.
+    if (averageSpacingBetweenFrames === 0) {
+      return { value: false };
+    }
+
     let previousImagePositionPatient = firstImagePositionPatient;
 
     for (let i = 1; i < instances.length; i++) {
@@ -242,6 +247,10 @@ function _getSpacingIssue(spacing, averageSpacing) {
 }
 
 function _getPerpendicularDistance(a, b) {
+  // TeleRAD: a frame in the middle of the series may lack ImagePositionPatient.
+  if (!a || !b) {
+    return 0;
+  }
   return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) + Math.pow(a[2] - b[2], 2));
 }
 
