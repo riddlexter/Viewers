@@ -25,3 +25,11 @@ FROM nginx:1.27-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 COPY .docker/TeleRAD/app.conf /etc/nginx/conf.d/app.conf
 COPY --from=builder /usr/src/app/platform/app/dist /var/www/html
+# No service worker: replaces OHIF's precaching sw.js with one that removes itself (see sw.js).
+COPY .docker/TeleRAD/sw.js /var/www/html/sw.js
+# index.html loads three files whose names never change between versions. Reference them with
+# ?v=<content hash> so no browser cache (e.g. from the OHIF 3.8 deployment) serves an old copy.
+RUN cd /var/www/html && for f in app.bundle.css app-config.js init-service-worker.js; do \
+      v=$(md5sum "$f" | cut -c1-10); \
+      sed -i "s#\"/$f\"#\"/$f?v=$v\"#" index.html; \
+    done && grep -o -E '"/(app\.bundle\.css|app-config\.js|init-service-worker\.js)\?v=[0-9a-f]+"' index.html
