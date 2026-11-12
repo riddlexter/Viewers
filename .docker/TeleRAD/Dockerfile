@@ -12,7 +12,8 @@ WORKDIR /usr/src/app
 ENV PATH=/usr/src/app/node_modules/.bin:$PATH
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc preinstall.js ./
 COPY --parents ./extensions/*/package.json ./modes/*/package.json ./platform/*/package.json ./
-RUN pnpm install --frozen-lockfile
+# --no-frozen-lockfile: .dockerignore leaves platform/docs out, which the lockfile lists (same as upstream).
+RUN pnpm install --no-frozen-lockfile
 COPY --link --exclude=Dockerfile . .
 ENV QUICK_BUILD=true
 ENV APP_CONFIG=config/telerad-orthanc.js
